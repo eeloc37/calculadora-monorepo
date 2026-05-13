@@ -1,0 +1,38 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [main, 'feature/**', 'fix/**']
+    paths: ['frontend/**']
+  pull_request:
+    branches: [main]
+    paths: ['frontend/**']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t frontend-test ./frontend
+
+      - name: Test container starts
+        run: |
+          docker run -d --name fe-test \
+            -e BACKEND_HOST=127.0.0.1 \
+            frontend-test
+          for i in 1 2 3 4 5; do
+            if docker exec fe-test wget -q --spider http://127.0.0.1/ 2>/dev/null; then
+              echo "Frontend container OK"
+              docker stop fe-test
+              exit 0
+            fi
+            echo "Waiting for Nginx... attempt $i"
+            sleep 2
+          done
+          echo "Frontend failed to start:"
+          docker logs fe-test
+          docker stop fe-test
+          exit 1
