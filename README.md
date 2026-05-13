@@ -1,7 +1,6 @@
 # Calculator App - Monorepo DevOps
 
-Monorepo del proyecto API Calculadora, estructurado siguiendo la Guia de Integracion y Despliegue DevOps para soportar CI/CD, contenedorizacion y despliegue en AWS EKS.
-
+Monorepo del proyecto API Calculadora, estructurado siguiendo la Guia de Integracion y Despliegue DevOps para soportar CI/CD y contenedorizacion
 ## Estructura del proyecto
 
 ```
@@ -49,18 +48,6 @@ docker compose up --build
 | POST   | `/api/multiplicar`  | `{"a": 3, "b": 4}`          |
 | POST   | `/api/dividir`      | `{"a": 10, "b": 2}`         |
 
-## Despliegue en Kubernetes
-
-```bash
-# Dev
-kubectl apply -k k8s/overlays/dev
-
-# Staging
-kubectl apply -k k8s/overlays/staging
-
-# Prod
-kubectl apply -k k8s/overlays/prod
-```
 
 ## Equipo y CODEOWNERS
 
